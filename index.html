@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Volley-sound-board</title>
+    <title>Dashboard</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .section {
@@ -51,34 +51,83 @@
     <script>
         let currentAudio = null;
 
+
+        const myinstants = "https://www.myinstants.com"
         const data = {
             "sections": [
                 {
                     "name": "Fehler",
+                    "style": "primary",
                     "buttons": [
-                        { "name": "Button 1", "sound": "sound1.mp3" },
-                        { "name": "Button 2", "sound": "sound2.mp3" }
+                        { "name": "Bodenlos", "sound": myinstants + "/media/sounds/bodenlos.mp3" },
+                        { "name": "they ask you how you are", "sound": myinstants + "/media/sounds/they-ask-you-how-you-are-and-you-just-have-to-say-that-youre-fine-sound-effect_IgYM1CV.mp3" },
+                        { "name": "Directed By", "sound": myinstants + "/media/sounds/directed-by-robert-b_voI2Z4T.mp3" },
+                        { "name": "ae-song", "sound": myinstants + "/media/sounds/tmpq7mpzzl9.mp3" },
+                        { "name": "Fail trompet", "sound": myinstants + "/media/sounds/fail-sound-effect.mp3" },
+                        { "name": "Oh no, Oh no no no", "sound": myinstants + "/media/sounds/oh-no-meme-2020_hX2n56J.mp3" },
+                        { "name": "wah wah wahaaaa", "sound": myinstants + "/media/sounds/wah-wah-sound-effect.mp3" },
                     ]
                 },
                 {
-                    "name": "Starker Angriff",
+                    "name": "Starker Punkt",
+                    "style": "secondary",
                     "buttons": [
-                        { "name": "Here comes the boom", "sound": "sound3.mp3" },
-                        { "name": "Button 4", "sound": "sound4.mp3" }
+                        { "name": "Here comes the boom", "sound": myinstants + "/media/sounds/angriff-here-comes-the-boom.mp3" },
+                        { "name": "Snoop Dogg", "sound": myinstants + "/media/sounds/tmpbxydyrz3.mp3" },
+                        { "name": "Guitar Solo", "sound": myinstants + "/media/sounds/free-bird-solo.mp3" },
+                        { "name": "Shooting Stars", "sound": myinstants + "/media/sounds/untitled-1_qPskhfn.mp3" },
+                        { "name": "Spongebob Rave", "sound": myinstants + "/media/sounds/stadium-rave.mp3" }
                     ]
                 },
                 {
-                    "name": "Trick",
+                    "name": "Annahme",
+                    "style": "success",
                     "buttons": [
-                        { "name": "Button 5", "sound": "sound5.mp3" },
-                        { "name": "Button 6", "sound": "sound6.mp3" }
+                        { "name": "Weeeeeeeee", "sound": myinstants + "/media/sounds/weeeee_original_1193597514938524841.mp3" },
+                    ]
+                },
+                {
+                    "name": "Block",
+                    "style": "danger",
+                    "buttons": [
+                        { "name": "Mein Block", "sound": myinstants + "/media/sounds/mein-block.mp3" }
                     ]
                 },
                 {
                     "name": "Fraglich",
+                    "style": "warning",
                     "buttons": [
-                        { "name": "Button 5", "sound": "sound5.mp3" },
-                        { "name": "Button 6", "sound": "sound6.mp3" }
+                        { "name": "Among Us", "sound": myinstants + "/media/sounds/among.mp3" },
+                        { "name": "x-Factor", "sound": myinstants + "/media/sounds/expedientes-secretos-x-musica22.mp3" }
+
+                    ]
+                },
+                {
+                    "name": "Geld",
+                    "style": "info",
+                    "buttons": [
+                        { "name": "Katsching", "sound": myinstants + "/media/sounds/buy_1.mp3" },
+                        { "name": "here comes the money", "sound": myinstants + "/media/sounds/money_2.mp3" }
+                    ]
+                },
+                {
+                    "name": "Schiri",
+                    "style": "dark",
+                    "buttons": [
+                        { "name": "Let me tell you someting", "sound": myinstants + "/media/sounds/let-me-tell-you-something.mp3" }
+                    ]
+                },
+                {
+                    "name": "Sonstiges",
+                    "style": "light",
+                    "buttons": [
+                        { "name": "Super Mario Jump", "sound": myinstants + "/media/sounds/super-mario-bros_e5hrra6.mp3" },
+                        { "name": "Tagesschau", "sound": myinstants + "/media/sounds/tagesschau-melodie-bis-2014-ohne-sprecher-hq-1.mp3" },
+                        { "name": "Windows shutdown", "sound": myinstants + "/media/sounds/preview_4.mp3" },
+                        { "name": "Pokemon win", "sound": myinstants + "/media/sounds/pokemon-red-blue-music-wild-pokemon-victory-theme-1.mp3" },
+                        { "name": "3k Jahre später", "sound": myinstants + "/media/sounds/3000_jahre_spater.mp3" }
+
+
                     ]
                 }
             ]
@@ -125,7 +174,7 @@
                 buttonContainer.className = 'd-flex justify-content-center';
                 section.buttons.forEach(button => {
                     const btn = document.createElement('button');
-                    btn.className = `btn btn-${getButtonClass(section.name)} m-2`;
+                    btn.className = `btn btn-${section.style} m-2`;
                     btn.textContent = button.name;
                     btn.onclick = () => playSound(this, button.sound);
                     buttonContainer.appendChild(btn);
@@ -135,19 +184,6 @@
                 sectionDiv.appendChild(collapseDiv);
                 dashboard.appendChild(sectionDiv);
             });
-        }
-
-        function getButtonClass(sectionName) {
-            switch (sectionName) {
-                case 'Fehler':
-                    return 'primary';
-                case 'Starker Angriff':
-                    return 'danger';
-                case 'Trick':
-                    return 'success';
-                default:
-                    return 'secondary';
-            }
         }
 
         document.addEventListener('DOMContentLoaded', () => loadDashboard(data));
