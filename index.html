@@ -1,44 +1,160 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <title>Volley-Nipple-Board</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volley-sound-board</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .section {
+            margin-bottom: 20px;
+        }
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        .dark-mode {
+            background-color: #121212;
+            color: white;
+        }
 
-    <style type="text/css">
-      body { background: rgb(66, 66, 66) !important; } /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
-   </style>
+        .dark-mode .btn {
+            border-color: white;
+        }
+
+        .dark-mode .btn-primary {
+            background-color: #1a73e8;
+        }
+
+        .dark-mode .btn-danger {
+            background-color: #d32f2f;
+        }
+
+        .dark-mode .btn-success {
+            background-color: #388e3c;
+        }
+
+        .dark-mode-toggle {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+        }
+    </style>
 </head>
 
 <body>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col">
-        <iframe width="110" height="200" src="https://www.myinstants.com/instant/angriff-here-comes-the-boom-35657/embed/" frameborder="0" scrolling="no"></iframe>
-      </div>
-      <div class="col">
-        <iframe width="110" height="200" src="https://www.myinstants.com/instant/oh-my-god-meme-88573/embed/" frameborder="0" scrolling="no"></iframe>
-      </div>
-      <div class="col">
-        <iframe width="110" height="200" src="https://www.myinstants.com/instant/snoop-dogg-meme-88682/embed/" frameborder="0" scrolling="no"></iframe>
-      </div>
+    <div class="container">
+        <button class="btn btn-secondary dark-mode-toggle" onclick="toggleDarkMode()">Dark Mode</button>
+        <h1 class="my-4 text-center">Dashboard</h1>
+        <div id="dashboard"></div>
     </div>
-    <div class="row">
-      <div class="col"></div>
-      <div class="col"></div>
-      <div class="col"></div>
-    </div>
-    <div class="row">
-      <div class="col"></div>
-      <div class="col"></div>
-      <div class="col"></div>
-    </div>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-    crossorigin="anonymous"></script>
+
+    <script>
+        let currentAudio = null;
+
+        const data = {
+            "sections": [
+                {
+                    "name": "Fehler",
+                    "buttons": [
+                        { "name": "Button 1", "sound": "sound1.mp3" },
+                        { "name": "Button 2", "sound": "sound2.mp3" }
+                    ]
+                },
+                {
+                    "name": "Starker Angriff",
+                    "buttons": [
+                        { "name": "Here comes the boom", "sound": "sound3.mp3" },
+                        { "name": "Button 4", "sound": "sound4.mp3" }
+                    ]
+                },
+                {
+                    "name": "Trick",
+                    "buttons": [
+                        { "name": "Button 5", "sound": "sound5.mp3" },
+                        { "name": "Button 6", "sound": "sound6.mp3" }
+                    ]
+                },
+                {
+                    "name": "Fraglich",
+                    "buttons": [
+                        { "name": "Button 5", "sound": "sound5.mp3" },
+                        { "name": "Button 6", "sound": "sound6.mp3" }
+                    ]
+                }
+            ]
+        };
+
+        function playSound(button, soundFile) {
+            if (currentAudio && currentAudio.src === soundFile) {
+                if (!currentAudio.paused) {
+                    currentAudio.pause();
+                    currentAudio.currentTime = 0;
+                    currentAudio = null;
+                    return;
+                }
+            } else if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            }
+
+            button.audio = new Audio(soundFile);
+            button.audio.play();
+            currentAudio = button.audio;
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        function loadDashboard(data) {
+            const dashboard = document.getElementById('dashboard');
+            data.sections.forEach((section, index) => {
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'section';
+
+                const sectionTitle = document.createElement('h2');
+                sectionTitle.className = 'text-center';
+                sectionTitle.innerHTML = `<a data-toggle="collapse" href="#collapse${index}" role="button" aria-expanded="false" aria-controls="collapse${index}">${section.name}</a>`;
+                sectionDiv.appendChild(sectionTitle);
+
+                const collapseDiv = document.createElement('div');
+                collapseDiv.className = 'collapse';
+                collapseDiv.id = `collapse${index}`;
+
+                const buttonContainer = document.createElement('div');
+                buttonContainer.className = 'd-flex justify-content-center';
+                section.buttons.forEach(button => {
+                    const btn = document.createElement('button');
+                    btn.className = `btn btn-${getButtonClass(section.name)} m-2`;
+                    btn.textContent = button.name;
+                    btn.onclick = () => playSound(this, button.sound);
+                    buttonContainer.appendChild(btn);
+                });
+
+                collapseDiv.appendChild(buttonContainer);
+                sectionDiv.appendChild(collapseDiv);
+                dashboard.appendChild(sectionDiv);
+            });
+        }
+
+        function getButtonClass(sectionName) {
+            switch (sectionName) {
+                case 'Fehler':
+                    return 'primary';
+                case 'Starker Angriff':
+                    return 'danger';
+                case 'Trick':
+                    return 'success';
+                default:
+                    return 'secondary';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => loadDashboard(data));
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>
